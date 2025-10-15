@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3071149699652551"
+     crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de Devis RAPIDE</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .input-section, .preview-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            grid-column: 1 / -1;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-danger {
+            background-color: #e74c3c;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-success {
+            background-color: #2ecc71;
+        }
+        
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+        
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .invoice-table th, .invoice-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .invoice-table th {
+            background-color: #f2f2f2;
+            font-weight: 600;
+        }
+        
+        .invoice-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .invoice-preview {
+            background-color: white;
+            padding: 30px;
+            border: 1px solid #ddd;
+            margin-top: 20px;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .invoice-header {
+            margin-bottom: 30px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .invoice-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .invoice-items {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .invoice-items th {
+            background-color: #3498db;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .invoice-items td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .invoice-totals {
+            margin-top: 30px;
+            text-align: right;
+        }
+        
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .total-final {
+            font-weight: bold;
+            font-size: 18px;
+            border-top: 2px solid #2c3e50;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+        
+        .empty-message {
+            text-align: center;
+            color: #7f8c8d;
+            font-style: italic;
+            margin-top: 50px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .action-buttons button {
+            width: auto;
+            flex: 1;
+        }
+        
+        .section-title {
+            border-bottom: 1px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 30px;
+            color: #2c3e50;
+        }
+        
+        .company-logo {
+            max-width: 150px;
+            max-height: 80px;
+            margin-bottom: 15px;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background-color: #2ecc71;
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 1000;
+        }
+        
+        .footer-section {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            font-size: 14px;
+            color: #7f8c8d;
+            text-align: center;
+        }
+        
+        .invoice-content {
+            flex-grow: 1;
+        }
+        
+        .logo-upload-container {
+            border: 2px dashed #3498db;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: #f8fafc;
+        }
+        
+        .logo-preview {
+            max-width: 200px;
+            max-height: 100px;
+            margin: 10px auto;
+            display: block;
+        }
+        
+        .logo-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .logo-actions button {
+            flex: 1;
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .validity-info {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border-left: 4px solid #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div class="notification" id="notification">PDF généré avec succès!</div>
+    
+    <div class="container">
+        <h1>Générateur de Devis</h1>
+        
+        <div class="input-section">
+            <h2>Informations de la société</h2>
+            
+            <div class="form-group">
+                <label for="companyName">Nom de la société</label>
+                <input type="text" id="companyName" placeholder="Nom de votre société" value="Votre Société SARL">
+            </div>
+            
+            <div class="form-group">
+                <label for="companyAddress">Adresse</label>
+                <textarea id="companyAddress" placeholder="Adresse de votre société">123 Rue de l'Exemple, Casablanca, Maroc</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="companyPhone">Téléphone</label>
+                <input type="text" id="companyPhone" placeholder="Téléphone" value="+212 5 22 33 44 55">
+            </div>
+            
+            <div class="form-group">
+                <label for="companyEmail">Email</label>
+                <input type="email" id="companyEmail" placeholder="Email" value="contact@votresociete.ma">
+            </div>
+            
+            <div class="form-group">
+                <label>Logo de la société</label>
+                <div class="logo-upload-container">
+                    <input type="file" id="logoUpload" accept="image/*" class="hidden">
+                    <div id="logoUploadArea">
+                        <p>Glissez-déposez votre logo ici ou</p>
+                        <button type="button" id="browseLogoBtn">Parcourir</button>
+                    </div>
+                    <div id="logoPreviewContainer" class="hidden">
+                        <img id="logoPreview" class="logo-preview" src="" alt="Aperçu du logo">
+                        <div class="logo-actions">
+                            <button type="button" id="changeLogoBtn" class="btn-success">Changer</button>
+                            <button type="button" id="removeLogoBtn" class="btn-danger">Supprimer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="section-title">Informations du client</h2>
+            
+            <div class="form-group">
+                <label for="clientName">Nom du client</label>
+                <input type="text" id="clientName" placeholder="Nom du client">
+            </div>
+            
+            <div class="form-group">
+                <label for="clientICE">ICE (Identifiant Commun de l'Entreprise)</label>
+                <input type="text" id="clientICE" placeholder="ICE du client">
+            </div>
+            
+            <div class="form-group">
+                <label for="clientAddress">Adresse du client</label>
+                <textarea id="clientAddress" placeholder="Adresse du client"></textarea>
+            </div>
+            
+            <h2 class="section-title">Validité du devis</h2>
+            
+            <div class="form-group">
+                <label for="quoteValidity">Validité du devis (jours)</label>
+                <input type="number" id="quoteValidity" value="30" min="1">
+            </div>
+            
+            <h2 class="section-title">Ajouter un article/service</h2>
+            
+            <div class="form-group">
+                <label for="itemDescription">Description</label>
+                <input type="text" id="itemDescription" placeholder="Description de l'article ou service">
+            </div>
+            
+            <div class="form-group">
+                <label for="itemQuantity">Quantité</label>
+                <input type="number" id="itemQuantity" value="1" min="1">
+            </div>
+            
+            <div class="form-group">
+                <label for="itemPrice">Prix unitaire (DH)</label>
+                <input type="number" id="itemPrice" step="0.01" min="0" placeholder="0.00">
+            </div>
+            
+            <div class="form-group">
+                <label for="itemVAT">Taux de TVA (%)</label>
+                <select id="itemVAT">
+                    <option value="0">0%</option>
+                    <option value="7">7%</option>
+                    <option value="10" selected>10%</option>
+                    <option value="20">20%</option>
+                </select>
+            </div>
+            
+            <button id="addItemBtn">Ajouter au devis</button>
+            
+            <h3 class="section-title">Articles ajoutés</h3>
+            <table class="invoice-table">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Quantité</th>
+                        <th>Prix unitaire</th>
+                        <th>TVA</th>
+                        <th>Total HT</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="itemsList">
+                    <!-- Les articles seront ajoutés ici dynamiquement -->
+                </tbody>
+            </table>
+            
+            <div class="action-buttons">
+                <button id="clearAllBtn" class="btn-danger">Tout effacer</button>
+            </div>
+        </div>
+        
+        <div class="preview-section">
+            <h2>Aperçu du devis</h2>
+            
+            <div class="invoice-preview" id="invoicePreview">
+                <div class="invoice-content">
+                    <div class="invoice-header">
+                        <div>
+                            <div class="invoice-title">DEVIS</div>
+                            <div>Date: <span id="invoiceDate"></span></div>
+                            <div>N°: <span id="invoiceNumber">DEV-2023-001</span></div>
+                        </div>
+                        <div id="previewLogoContainer">
+                            <!-- Le logo sera ajouté ici dynamiquement -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3>Client</h3>
+                        <div id="clientInfo">
+                            <div id="previewClientName"></div>
+                            <div id="previewClientICE"></div>
+                            <div id="previewClientAddress"></div>
+                        </div>
+                    </div>
+                    
+                    <table class="invoice-items">
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th>Quantité</th>
+                                <th>Prix unitaire HT</th>
+                                <th>TVA</th>
+                                <th>Montant HT</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invoiceItems">
+                            <!-- Les articles du devis seront ajoutés ici -->
+                        </tbody>
+                    </table>
+                    
+                    <div class="invoice-totals">
+                        <div class="total-row">
+                            <span>Total HT:</span>
+                            <span id="subtotal">0.00 DH</span>
+                        </div>
+                        <div id="vatDetails">
+                            <!-- Les détails de TVA seront ajoutés ici -->
+                        </div>
+                        <div class="total-row total-final">
+                            <span>Total TTC:</span>
+                            <span id="total">0.00 DH</span>
+                        </div>
+                    </div>
+                    
+                    <div class="validity-info">
+                        <p><strong>Validité du devis:</strong> Ce devis est valable jusqu'au <span id="validityDate"></span></p>
+                    </div>
+                </div>
+                
+                <!-- Pied de page pour l'aperçu à l'écran -->
+                <div class="footer-section">
+                    <div id="previewFooterCompanyName">Votre Société SARL</div>
+                    <div id="previewFooterCompanyAddress">123 Rue de l'Exemple, Casablanca, Maroc</div>
+                    <div id="previewFooterCompanyPhone">+212 5 22 33 44 55 - <span id="previewFooterCompanyEmail">contact@votresociete.ma</span></div>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button id="generatePdfBtn" class="btn-success">Générer PDF</button>
+                <button id="printBtn">Imprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let items = [];
+        let quoteCounter = 1;
+        let companyLogo = null;
+        
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mettre à jour la date
+            updateQuoteDate();
+            
+            // Mettre à jour la date de validité
+            updateValidityDate();
+            
+            // Ajouter les écouteurs d'événements
+            document.getElementById('addItemBtn').addEventListener('click', addItem);
+            document.getElementById('clearAllBtn').addEventListener('click', clearAllItems);
+            document.getElementById('generatePdfBtn').addEventListener('click', generatePDF);
+            document.getElementById('printBtn').addEventListener('click', printQuote);
+            
+            // Événements pour l'upload du logo
+            document.getElementById('browseLogoBtn').addEventListener('click', function() {
+                document.getElementById('logoUpload').click();
+            });
+            
+            document.getElementById('logoUpload').addEventListener('change', handleLogoUpload);
+            document.getElementById('changeLogoBtn').addEventListener('click', function() {
+                document.getElementById('logoUpload').click();
+            });
+            
+            document.getElementById('removeLogoBtn').addEventListener('click', removeLogo);
+            
+            // Gestion du drag & drop pour le logo
+            const logoUploadArea = document.getElementById('logoUploadArea');
+            logoUploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                logoUploadArea.style.backgroundColor = '#e8f4fd';
+            });
+            
+            logoUploadArea.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                logoUploadArea.style.backgroundColor = '';
+            });
+            
+            logoUploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                logoUploadArea.style.backgroundColor = '';
+                if (e.dataTransfer.files.length) {
+                    document.getElementById('logoUpload').files = e.dataTransfer.files;
+                    handleLogoUpload();
+                }
+            });
+            
+            // Mettre à jour les informations de la société et du client en temps réel
+            document.getElementById('companyName').addEventListener('input', updateCompanyInfo);
+            document.getElementById('companyAddress').addEventListener('input', updateCompanyInfo);
+            document.getElementById('companyPhone').addEventListener('input', updateCompanyInfo);
+            document.getElementById('companyEmail').addEventListener('input', updateCompanyInfo);
+            
+            document.getElementById('clientName').addEventListener('input', updateClientInfo);
+            document.getElementById('clientICE').addEventListener('input', updateClientInfo);
+            document.getElementById('clientAddress').addEventListener('input', updateClientInfo);
+            
+            // Mettre à jour la date de validité
+            document.getElementById('quoteValidity').addEventListener('input', updateValidityDate);
+            
+            // Permettre l'ajout avec la touche Entrée
+            document.getElementById('itemDescription').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addItem();
+                }
+            });
+            
+            // Initialiser les informations de la société et du client
+            updateCompanyInfo();
+            updateClientInfo();
+        });
+        
+        // Mettre à jour la date du devis
+        function updateQuoteDate() {
+            const now = new Date();
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            document.getElementById('invoiceDate').textContent = now.toLocaleDateString('fr-FR', options);
+        }
+        
+        // Mettre à jour la date de validité
+        function updateValidityDate() {
+            const now = new Date();
+            const validityDays = parseInt(document.getElementById('quoteValidity').value) || 30;
+            const validityDate = new Date(now);
+            validityDate.setDate(now.getDate() + validityDays);
+            
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            document.getElementById('validityDate').textContent = validityDate.toLocaleDateString('fr-FR', options);
+        }
+        
+        // Mettre à jour les informations de la société dans l'aperçu
+        function updateCompanyInfo() {
+            const companyName = document.getElementById('companyName').value || 'Votre Société SARL';
+            const companyAddress = document.getElementById('companyAddress').value || '123 Rue de l\'Exemple, Casablanca, Maroc';
+            const companyPhone = document.getElementById('companyPhone').value || '+212 5 22 33 44 55';
+            const companyEmail = document.getElementById('companyEmail').value || 'contact@votresociete.ma';
+            
+            // Mettre à jour le pied de page
+            document.getElementById('previewFooterCompanyName').textContent = companyName;
+            document.getElementById('previewFooterCompanyAddress').textContent = companyAddress;
+            document.getElementById('previewFooterCompanyPhone').textContent = companyPhone;
+            document.getElementById('previewFooterCompanyEmail').textContent = companyEmail;
+        }
+        
+        // Gérer l'upload du logo
+        function handleLogoUpload() {
+            const fileInput = document.getElementById('logoUpload');
+            const file = fileInput.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    companyLogo = e.target.result;
+                    
+                    // Afficher l'aperçu du logo
+                    document.getElementById('logoPreview').src = companyLogo;
+                    document.getElementById('logoUploadArea').classList.add('hidden');
+                    document.getElementById('logoPreviewContainer').classList.remove('hidden');
+                    
+                    // Mettre à jour l'aperçu du devis
+                    updatePreviewLogo();
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        // Mettre à jour le logo dans l'aperçu
+        function updatePreviewLogo() {
+            const previewContainer = document.getElementById('previewLogoContainer');
+            previewContainer.innerHTML = '';
+            
+            if (companyLogo) {
+                const logoImg = document.createElement('img');
+                logoImg.src = companyLogo;
+                logoImg.alt = 'Logo de la société';
+                logoImg.className = 'company-logo';
+                previewContainer.appendChild(logoImg);
+            }
+        }
+        
+        // Supprimer le logo
+        function removeLogo() {
+            companyLogo = null;
+            document.getElementById('logoUpload').value = '';
+            document.getElementById('logoUploadArea').classList.remove('hidden');
+            document.getElementById('logoPreviewContainer').classList.add('hidden');
+            
+            // Mettre à jour l'aperçu du devis
+            updatePreviewLogo();
+        }
+        
+        // Mettre à jour les informations du client dans l'aperçu
+        function updateClientInfo() {
+            document.getElementById('previewClientName').textContent = document.getElementById('clientName').value || '';
+            
+            const clientICE = document.getElementById('clientICE').value || '';
+            document.getElementById('previewClientICE').textContent = clientICE ? `ICE: ${clientICE}` : '';
+            
+            document.getElementById('previewClientAddress').innerHTML = (document.getElementById('clientAddress').value || '').replace(/\n/g, '<br>');
+        }
+        
+        // Ajouter un article au devis
+        function addItem() {
+            const description = document.getElementById('itemDescription').value.trim();
+            const quantity = parseInt(document.getElementById('itemQuantity').value);
+            const price = parseFloat(document.getElementById('itemPrice').value);
+            const vat = parseFloat(document.getElementById('itemVAT').value);
+            
+            // Validation
+            if (!description) {
+                alert('Veuillez saisir une description');
+                return;
+            }
+            
+            if (isNaN(quantity) || quantity <= 0) {
+                alert('Veuillez saisir une quantité valide');
+                return;
+            }
+            
+            if (isNaN(price) || price < 0) {
+                alert('Veuillez saisir un prix valide');
+                return;
+            }
+            
+            // Créer l'objet article
+            const item = {
+                id: Date.now(), // ID unique basé sur le timestamp
+                description: description,
+                quantity: quantity,
+                price: price,
+                vat: vat,
+                totalHT: quantity * price
+            };
+            
+            // Ajouter à la liste
+            items.push(item);
+            
+            // Mettre à jour l'affichage
+            updateItemsList();
+            updateQuotePreview();
+            
+            // Réinitialiser le formulaire
+            document.getElementById('itemDescription').value = '';
+            document.getElementById('itemQuantity').value = 1;
+            document.getElementById('itemPrice').value = '';
+            document.getElementById('itemDescription').focus();
+        }
+        
+        // Supprimer un article
+        function removeItem(id) {
+            items = items.filter(item => item.id !== id);
+            updateItemsList();
+            updateQuotePreview();
+        }
+        
+        // Mettre à jour la liste des articles
+        function updateItemsList() {
+            const itemsList = document.getElementById('itemsList');
+            itemsList.innerHTML = '';
+            
+            if (items.length === 0) {
+                itemsList.innerHTML = '<tr><td colspan="6" style="text-align: center;">Aucun article ajouté</td></tr>';
+                return;
+            }
+            
+            items.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.description}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.price.toFixed(2)} DH</td>
+                    <td>${item.vat}%</td>
+                    <td>${item.totalHT.toFixed(2)} DH</td>
+                    <td><button onclick="removeItem(${item.id})" class="btn-danger">Supprimer</button></td>
+                `;
+                itemsList.appendChild(row);
+            });
+        }
+        
+        // Mettre à jour l'aperçu du devis
+        function updateQuotePreview() {
+            const invoiceItems = document.getElementById('invoiceItems');
+            invoiceItems.innerHTML = '';
+            
+            if (items.length === 0) {
+                invoiceItems.innerHTML = '<tr><td colspan="5" style="text-align: center;">Aucun article ajouté</td></tr>';
+                document.getElementById('subtotal').textContent = '0.00 DH';
+                document.getElementById('total').textContent = '0.00 DH';
+                document.getElementById('vatDetails').innerHTML = '';
+                return;
+            }
+            
+            // Ajouter chaque article à l'aperçu
+            items.forEach(item => {
+                const row = document.createElement('tr');
+                const vatAmount = item.totalHT * (item.vat / 100);
+                
+                row.innerHTML = `
+                    <td>${item.description}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.price.toFixed(2)} DH</td>
+                    <td>${item.vat}%</td>
+                    <td>${item.totalHT.toFixed(2)} DH</td>
+                `;
+                invoiceItems.appendChild(row);
+            });
+            
+            // Calculer les totaux
+            calculateTotals();
+        }
+        
+        // Calculer les totaux
+        function calculateTotals() {
+            let subtotal = 0;
+            const vatGroups = {};
+            
+            // Calculer le sous-total et regrouper par taux de TVA
+            items.forEach(item => {
+                subtotal += item.totalHT;
+                
+                if (!vatGroups[item.vat]) {
+                    vatGroups[item.vat] = 0;
+                }
+                vatGroups[item.vat] += item.totalHT * (item.vat / 100);
+            });
+            
+            // Calculer le total TTC
+            let totalVAT = 0;
+            Object.values(vatGroups).forEach(vat => {
+                totalVAT += vat;
+            });
+            
+            const total = subtotal + totalVAT;
+            
+            // Mettre à jour l'affichage
+            document.getElementById('subtotal').textContent = subtotal.toFixed(2) + ' DH';
+            document.getElementById('total').textContent = total.toFixed(2) + ' DH';
+            
+            // Afficher les détails de TVA
+            const vatDetails = document.getElementById('vatDetails');
+            vatDetails.innerHTML = '';
+            
+            Object.keys(vatGroups).forEach(vatRate => {
+                const vatAmount = vatGroups[vatRate];
+                const row = document.createElement('div');
+                row.className = 'total-row';
+                row.innerHTML = `<span>TVA ${vatRate}%:</span><span>${vatAmount.toFixed(2)} DH</span>`;
+                vatDetails.appendChild(row);
+            });
+        }
+        
+        // Effacer tous les articles
+        function clearAllItems() {
+            if (items.length === 0) {
+                alert('Aucun article à effacer');
+                return;
+            }
+            
+            if (confirm('Êtes-vous sûr de vouloir effacer tous les articles?')) {
+                items = [];
+                updateItemsList();
+                updateQuotePreview();
+            }
+        }
+        
+        // Générer le PDF avec du texte sélectionnable et pied de page
+        function generatePDF() {
+            if (items.length === 0) {
+                alert('Veuillez ajouter au moins un article avant de générer le PDF');
+                return;
+            }
+            
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Définir les marges et la largeur utile
+            const margin = 20;
+            const pageWidth = doc.internal.pageSize.width;
+            const pageHeight = doc.internal.pageSize.height;
+            const usableWidth = pageWidth - 2 * margin;
+            
+            // Position verticale actuelle
+            let y = margin;
+            
+            // Ajouter le logo s'il existe
+            if (companyLogo) {
+                try {
+                    doc.addImage(companyLogo, 'PNG', pageWidth - margin - 50, y, 50, 25);
+                    y += 30; // Ajuster la position pour le contenu suivant
+                } catch (e) {
+                    console.error("Erreur lors de l'ajout du logo:", e);
+                }
+            }
+            
+            // Titre du devis
+            doc.setFontSize(20);
+            doc.setFont(undefined, 'bold');
+            doc.text("DEVIS", margin, y);
+            
+            // Numéro et date
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'normal');
+            y += 10;
+            doc.text("Date: " + document.getElementById('invoiceDate').textContent, margin, y);
+            y += 6;
+            doc.text("N°: " + document.getElementById('invoiceNumber').textContent, margin, y);
+            
+            // Informations du client
+            y += 15;
+            doc.setFont(undefined, 'bold');
+            doc.text("Client:", margin, y);
+            doc.setFont(undefined, 'normal');
+            
+            const clientName = document.getElementById('previewClientName').textContent;
+            const clientICE = document.getElementById('clientICE').value || '';
+            const clientAddress = document.getElementById('previewClientAddress').textContent.replace(/<br>/g, '\n');
+            
+            if (clientName) {
+                y += 7;
+                doc.text(clientName, margin, y);
+            }
+            
+            if (clientICE) {
+                y += 6;
+                doc.text("ICE: " + clientICE, margin, y);
+            }
+            
+            if (clientAddress) {
+                const clientLines = clientAddress.split('\n');
+                clientLines.forEach(line => {
+                    if (line.trim()) {
+                        y += 6;
+                        doc.text(line, margin, y);
+                    }
+                });
+            }
+            
+            // Tableau des articles
+            y += 15;
+            
+            // En-tête du tableau
+            const tableHeaders = [["Description", "Quantité", "Prix HT", "TVA", "Montant HT"]];
+            const tableData = items.map(item => [
+                item.description,
+                item.quantity.toString(),
+                item.price.toFixed(2) + " DH",
+                item.vat + "%",
+                item.totalHT.toFixed(2) + " DH"
+            ]);
+            
+            // Utiliser autoTable pour créer un tableau structuré
+            doc.autoTable({
+                startY: y,
+                head: tableHeaders,
+                body: tableData,
+                margin: { left: margin, right: margin },
+                styles: { fontSize: 10 },
+                headStyles: { fillColor: [52, 152, 219] },
+                columnStyles: {
+                    0: { cellWidth: 'auto' },
+                    1: { cellWidth: 20 },
+                    2: { cellWidth: 30 },
+                    3: { cellWidth: 20 },
+                    4: { cellWidth: 30 }
+                }
+            });
+            
+            // Calculer les totaux pour le PDF
+            let subtotal = 0;
+            const vatGroups = {};
+            
+            items.forEach(item => {
+                subtotal += item.totalHT;
+                
+                if (!vatGroups[item.vat]) {
+                    vatGroups[item.vat] = 0;
+                }
+                vatGroups[item.vat] += item.totalHT * (item.vat / 100);
+            });
+            
+            let totalVAT = 0;
+            Object.values(vatGroups).forEach(vat => {
+                totalVAT += vat;
+            });
+            
+            const total = subtotal + totalVAT;
+            
+            // Afficher les totaux
+            const finalY = doc.lastAutoTable.finalY + 10;
+            
+            // Total HT
+            doc.setFont(undefined, 'normal');
+            doc.text("Total HT:", pageWidth - margin - 60, finalY);
+            doc.text(subtotal.toFixed(2) + " DH", pageWidth - margin - 10, finalY, { align: "right" });
+            
+            // Détails TVA
+            let vatY = finalY + 7;
+            Object.keys(vatGroups).forEach(vatRate => {
+                const vatAmount = vatGroups[vatRate];
+                doc.text("TVA " + vatRate + "%:", pageWidth - margin - 60, vatY);
+                doc.text(vatAmount.toFixed(2) + " DH", pageWidth - margin - 10, vatY, { align: "right" });
+                vatY += 6;
+            });
+            
+            // Total TTC
+            doc.setFont(undefined, 'bold');
+            doc.text("Total TTC:", pageWidth - margin - 60, vatY + 5);
+            doc.text(total.toFixed(2) + " DH", pageWidth - margin - 10, vatY + 5, { align: "right" });
+            
+            // Informations de validité
+            const validityY = vatY + 15;
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'bold');
+            doc.text("Validité du devis:", margin, validityY);
+            doc.setFont(undefined, 'normal');
+            doc.text("Ce devis est valable jusqu'au " + document.getElementById('validityDate').textContent, margin, validityY + 6);
+            
+            // Pied de page avec les informations de la société
+            const footerY = pageHeight - 25;
+            
+            // Ligne de séparation
+            doc.setDrawColor(200, 200, 200);
+            doc.line(margin, footerY - 15, pageWidth - margin, footerY - 15);
+            
+            // Informations de la société
+            doc.setFontSize(10);
+            doc.setTextColor(100);
+            
+            const companyName = document.getElementById('companyName').value || 'Votre Société SARL';
+            const companyAddress = document.getElementById('companyAddress').value || '123 Rue de l\'Exemple, Casablanca, Maroc';
+            const companyPhone = document.getElementById('companyPhone').value || '+212 5 22 33 44 55';
+            const companyEmail = document.getElementById('companyEmail').value || 'contact@votresociete.ma';
+            
+            // Centrer le texte du pied de page
+            doc.text(companyName, pageWidth / 2, footerY - 5, { align: "center" });
+            doc.text(companyAddress, pageWidth / 2, footerY, { align: "center" });
+            doc.text(`${companyPhone} - ${companyEmail}`, pageWidth / 2, footerY + 5, { align: "center" });
+            
+            // Télécharger le PDF
+            doc.save('devis-' + document.getElementById('invoiceNumber').textContent + '.pdf');
+            
+            // Afficher la notification
+            showNotification('PDF généré avec succès!');
+        }
+        
+        // Afficher une notification
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Imprimer le devis
+        function printQuote() {
+            if (items.length === 0) {
+                alert('Veuillez ajouter au moins un article avant d\'imprimer');
+                return;
+            }
+            
+            // Créer une fenêtre d'impression
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                    <head>
+                        <title>Devis ${document.getElementById('invoiceNumber').textContent}</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; margin: 20px; display: flex; flex-direction: column; min-height: 100vh; }
+                            .invoice-header { margin-bottom: 30px; border-bottom: 2px solid #3498db; padding-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-start; }
+                            .invoice-title { font-size: 28px; font-weight: bold; }
+                            .invoice-items { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                            .invoice-items th { background-color: #3498db; color: white; padding: 12px; text-align: left; }
+                            .invoice-items td { padding: 12px; border-bottom: 1px solid #ddd; }
+                            .invoice-totals { margin-top: 30px; text-align: right; }
+                            .total-row { display: flex; justify-content: space-between; margin-bottom: 10px; }
+                            .total-final { font-weight: bold; font-size: 18px; border-top: 2px solid #2c3e50; padding-top: 10px; margin-top: 10px; }
+                            .company-logo { max-width: 150px; max-height: 80px; margin-bottom: 15px; }
+                            .footer-section { margin-top: auto; padding-top: 20px; border-top: 1px solid #ddd; font-size: 14px; color: #7f8c8d; text-align: center; }
+                            .invoice-content { flex-grow: 1; }
+                            .validity-info { background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin-top: 20px; border-left: 4px solid #3498db; }
+                            @media print {
+                                body { margin: 0; }
+                                .invoice-header { border-bottom: 2px solid #000; }
+                                .invoice-items th { background-color: #000 !important; -webkit-print-color-adjust: exact; }
+                                .footer-section { border-top: 1px solid #000; }
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        ${document.getElementById('invoicePreview').innerHTML}
+                    </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.focus();
+            
+            // Attendre que le contenu soit chargé avant d'imprimer
+            printWindow.onload = function() {
+                printWindow.print();
+                // printWindow.close();
+            };
+        }
+    </script>
+</body>
+</html>
